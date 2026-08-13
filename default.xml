@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote name="aosp"  fetch="https://android.googlesource.com" />
+  <remote name="github" fetch="http://github.com" />
+  <remote name="clo"   fetch="https://git.codelinaro.org/clo/la" />
+  <default remote="aosp" revision="main-kernel-build-2024" sync-j="8" clone-depth="1" />
+
+
+  <project path="common" name="kernel/common"
+           revision="refs/tags/android15-6.6-2026-04_r3" />
+
+  <project path="msm-kernel" name="dx4m/android_kernel_msm-6.6_nothing_sm7750"
+           remote="github" revision="sm7750/b/FroggerPro">
+    <linkfile src="bazel.WORKSPACE" dest="WORKSPACE" />
+    <linkfile src="bazel.WORKSPACE" dest="WORKSPACE.bzlmod" />
+    <linkfile src="msm_kernel_extensions.bzl" dest="build/msm_kernel_extensions.bzl" />
+    <linkfile src="BUILD.bazel" dest="build/BUILD.bazel" />
+  </project>
+
+  <project path="build/kernel" name="kernel/build" remote="clo" revision="kernel.lnx.6.6.r1-rel">
+    <linkfile src="kleaf/bzlmod/bazel.MODULE.bazel" dest="MODULE.bazel" />
+  </project>
+
+  <project path="froggerpro" name="dx4m/froggerpro_bazel_wrapper" remote="github" revision="main">
+    <linkfile src="build/bazel.sh" dest="tools/bazel" />
+  </project>
+
+  <project path="kernel/configs" name="kernel/configs" revision="main" />
+  <project path="external/dtc"   name="platform/external/dtc" revision="main" />
+
+  <project path="build/bazel_common_rules" name="platform/build/bazel_common_rules" />
+  <project path="prebuilts/clang/host/linux-x86" name="platform/prebuilts/clang/host/linux-x86" />
+  <project path="prebuilts/build-tools" name="platform/prebuilts/build-tools" />
+  <project path="prebuilts/kernel-build-tools" name="kernel/prebuilts/build-tools" />
+  <project path="prebuilts/clang-tools" name="platform/prebuilts/clang-tools" />
+  <project path="prebuilts/jdk/jdk11" name="platform/prebuilts/jdk/jdk11" />
+  <project path="prebuilts/ndk-r26" name="toolchain/prebuilts/ndk/r26" />
+  <project path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8"
+           name="platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" />
+
+  <project path="tools/mkbootimg" name="platform/system/tools/mkbootimg" />
+
+  <project path="external/libcap" name="platform/external/libcap" />
+  <project path="external/libcap-ng" name="platform/external/libcap-ng" />
+  <project path="external/lz4" name="platform/external/lz4" />
+  <project path="external/pigz" name="platform/external/pigz" />
+  <project path="external/toybox" name="platform/external/toybox" />
+  <project path="external/zlib" name="platform/external/zlib" />
+  <project path="external/zopfli" name="platform/external/zopfli" />
+
+  <project path="external/bazel-skylib" name="platform/external/bazel-skylib" />
+  <project path="external/bazelbuild-platforms" name="platform/external/bazelbuild-platforms" />
+  <project path="external/bazelbuild-apple_support" name="platform/external/bazelbuild-apple_support" />
+  <project path="external/bazelbuild-rules_cc" name="platform/external/bazelbuild-rules_cc" />
+  <project path="external/bazelbuild-rules_java" name="platform/external/bazelbuild-rules_java" />
+  <project path="external/bazelbuild-rules_license" name="platform/external/bazelbuild-rules_license" />
+  <project path="external/bazelbuild-rules_pkg" name="platform/external/bazelbuild-rules_pkg" />
+  <project path="external/bazelbuild-rules_python" name="platform/external/bazelbuild-rules_python" />
+  <project path="external/bazelbuild-bazel-central-registry" name="platform/external/bazelbuild-bazel-central-registry" />
+  <project path="external/python/absl-py" name="platform/external/python/absl-py" />
+
+</manifest>
