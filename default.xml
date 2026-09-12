@@ -7,10 +7,10 @@
 
 
   <project path="common" name="kernel/common"
-           revision="refs/tags/android15-6.6-2026-04_r3" />
+           revision="refs/tags/android15-6.6-2026-04_r20" />
 
   <project path="msm-kernel" name="dx4m/android_kernel_msm-6.6_nothing_sm7750"
-           remote="github" revision="sm7750/b/FroggerPro">
+           remote="github" revision="dev">
     <linkfile src="bazel.WORKSPACE" dest="WORKSPACE" />
     <linkfile src="bazel.WORKSPACE" dest="WORKSPACE.bzlmod" />
     <linkfile src="msm_kernel_extensions.bzl" dest="build/msm_kernel_extensions.bzl" />
