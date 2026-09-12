@@ -22,6 +22,15 @@ tools/bazel run --config=stamp //froggerpro:kernel_sukisu
 tools/bazel run --config=stamp //froggerpro:kernel_resukisu
 ```
 
+and with susfs
+
+```sh
+tools/bazel run --config=stamp //froggerpro:kernel_ksu_susfs
+tools/bazel run --config=stamp //froggerpro:kernel_ksun_susfs
+tools/bazel run --config=stamp //froggerpro:kernel_sukisu_susfs
+tools/bazel run --config=stamp //froggerpro:kernel_resukisu_susfs
+```
+
 or use
 
 ```sh
