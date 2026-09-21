@@ -1,0 +1,102 @@
+name: Manual Kernel Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      kernel:
+        description: 'Kernel to build'
+        required: true
+        type: choice
+        options:
+          - Stock Kernel
+          - KernelSU
+          - KernelSU-Next
+          - SukiSU
+          - ReSukiSU
+        default: ReSukiSU
+      susfs:
+        description: 'Patch for SUSFS'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Maximize Github Runner Space
+        uses: justinthelaw/maximize-github-runner-space@v0.9.0
+        with:
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+
+      - name: Setup environment and Sync
+        env:
+          GIT_REPO: '${{ github.server_url }}/${{ github.repository }}.git'
+        run: |
+          echo "Building kernel: ${{ inputs.kernel }}"
+          echo "SUSFS: ${{ inputs.susfs }}"
+
+          mkdir -p ~/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+
+          mkdir nt_kernel_build
+          cd nt_kernel_build
+
+          ~/bin/repo init --depth=1 -u $GIT_REPO
+          ~/bin/repo sync
+
+      - name: Build Kernel
+        working-directory: nt_kernel_build
+        env:
+          SELECTED_KERNEL: ${{ inputs.kernel }}
+          SUSFS: ${{ inputs.susfs }}
+        run: |
+          echo "Building kernel..."
+          KERNEL="kernel"
+          if [ "$SELECTED_KERNEL" = "Stock Kernel" ] && [ "$SUSFS" = true ]; then
+              echo "No SUSFS option for Stock Kernel"
+              echo "Using Normal Stock Kernel"
+          fi
+
+          if [ "$SELECTED_KERNEL" = "KernelSU" ]; then
+              KERNEL="${KERNEL}_ksu"
+          fi
+          if [ "$SELECTED_KERNEL" = "KernelSU-Next" ]; then
+              KERNEL="${KERNEL}_ksun"
+          fi
+          if [ "$SELECTED_KERNEL" = "SukiSU" ]; then
+              KERNEL="${KERNEL}_sukisu"
+          fi
+          if [ "$SELECTED_KERNEL" = "ReSukiSU" ]; then
+              KERNEL="${KERNEL}_resukisu"
+          fi
+
+          if [ "$SUSFS" = true ]; then
+              if [ "$SELECTED_KERNEL" = "Stock Kernel" ]; then    
+                  echo "No SUSFS option for Stock Kernel"
+                  echo "Using Normal Stock Kernel"
+              else
+                  KERNEL="${KERNEL}_susfs"
+              fi
+          fi
+
+          tools/bazel run --config=stamp //froggerpro:$KERNEL
+
+      - name: Upload Kernel Modules
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-modules
+          path: nt_kernel_build/out/msm-kernel-sun-perf/dist/*.ko
+          compression-level: 9
+
+      - name: Upload Boot Image
+        uses: actions/upload-artifact@v4
+        with:
+          name: boot-img
+          path: nt_kernel_build/out/msm-kernel-sun-perf/dist/boot.img
+
