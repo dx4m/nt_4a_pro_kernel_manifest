@@ -132,7 +132,7 @@ jobs:
           if [ "$SELECTED_KERNEL" = "Stock Kernel" ]; then
               echo "ksu_ver=Stock" >> $GITHUB_OUTPUT
           else
-              echo "ksu_ver=$(git -C "$KSU_DIR" describe --tags --abbrev=0)-$(git -C "$KSU_DIR" rev-parse --short=12 HEAD)@$(git -C "KSU_DIR" rev_parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+              echo "ksu_ver=$(git -C "$KSU_DIR" describe --tags --abbrev=0)-$(git -C "$KSU_DIR" rev-parse --short=12 HEAD)@$(git -C "$KSU_DIR" rev_parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
           fi
 
           echo "build_time=$((END - START))" >> $GITHUB_OUTPUT
