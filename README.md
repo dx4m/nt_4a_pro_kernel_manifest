@@ -1,6 +1,6 @@
 # Nothing Phone (4a) Pro Kernel Build Manifest
 
-It gets the complete buildchain from different sources.
+It gets the complete buildchain from different sources to compile a custom Kernel.
 
 ## How to setup
 
@@ -11,6 +11,8 @@ mkdir nt_kernel_build && cd nt_kernel_build
 repo init --depth=1 -u https://github.com/dx4m/nt_4a_pro_kernel_manifest.git
 repo sync
 ```
+
+## How to build
 
 When finished you can pick one of the following commands to build the kernel:
 
@@ -38,6 +40,12 @@ tools/bazel run --config=stamp //msm-kernel:sun_perf_dist
 ```
 
 without any patches from the bazel wrapper.
+
+## Build with Github Actions
+
+You can build it through actions. Just fork it, setup write permission, go to Actions, click on "Manual Kernel Build" and click on "Run workflow".
+Then select your settings and hit the green "Run workflow". Keep in mind, Github Runners take up to an hour to finish.
+Self-Hosted runners are quicker, but need more setup and your own hardware. For more information read the docs ***[here](https://docs.github.com/en/actions/concepts/runners/self-hosted-runners)***
 
 ## Bazel Wrapper?
 
