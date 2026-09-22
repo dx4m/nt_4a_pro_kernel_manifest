@@ -59,6 +59,10 @@ jobs:
           echo "Using manifest from: $GIT_REPO"
           export PATH="$HOME/bin:$PATH"
 
+          if [ -d "nt_kernel_build" ]; then
+              rm -rf nt_kernel_build
+          fi
+
           mkdir nt_kernel_build
           cd nt_kernel_build
 
@@ -74,8 +78,10 @@ jobs:
         run: |
           echo "Building kernel..."
 
-          echo "kernel_ver=$(make -C common kernelversion)" >> $GITHUB_OUTPUT
-          echo "tag_ver=g$(git -C common rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          KERNEL_VER=$(make -C common kernelversion | tr -d '\n')
+          TAG_VER="g$(git -C common rev-parse --short HEAD | tr -d '\n')"
+          echo "kernel_ver=$KERNEL_VER" >> $GITHUB_OUTPUT
+          echo "tag_ver=$TAG_VER" >> $GITHUB_OUTPUT
           
           if [ "$SELECTED_KERNEL" = "KernelSU-Next" ]; then
               KSU_DIR="common/KernelSU-Next"
