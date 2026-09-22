@@ -3,6 +3,14 @@ name: Manual Kernel Build
 on:
   workflow_dispatch:
     inputs:
+      runner:
+        description: 'Build environment'
+        required: true
+        type: choice
+        options:
+          - GitHub Runner
+          - Self-Hosted
+        default: GitHub Runner
       kernel:
         description: 'Kernel to build'
         required: true
@@ -22,10 +30,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner == 'Self-Hosted' && 'self-hosted' || 'ubuntu-latest' }}
 
     steps:
       - name: Maximize Github Runner Space
+        if: ${{ inputs.runner == 'GitHub Runner' }}
         uses: justinthelaw/maximize-github-runner-space@v0.9.0
         with:
           remove-dotnet: 'true'
@@ -40,7 +49,7 @@ jobs:
           mkdir -p ~/bin
           curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
           chmod a+x ~/bin/repo
-          
+
       - name: Sync kernel and build env
         env:
           GIT_REPO: '${{ github.server_url }}/${{ github.repository }}.git'
@@ -83,7 +92,7 @@ jobs:
           fi
 
           if [ "$SUSFS" = true ]; then
-              if [ "$SELECTED_KERNEL" = "Stock Kernel" ]; then    
+              if [ "$SELECTED_KERNEL" = "Stock Kernel" ]; then
                   echo "No SUSFS option for Stock Kernel"
                   echo "Using Normal Stock Kernel"
               else
