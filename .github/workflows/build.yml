@@ -33,6 +33,9 @@ jobs:
     runs-on: ${{ inputs.runner == 'Self-Hosted' && 'self-hosted' || 'ubuntu-latest' }}
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
       - name: Maximize Github Runner Space
         if: ${{ inputs.runner == 'GitHub Runner' }}
         uses: justinthelaw/maximize-github-runner-space@v0.9.0
