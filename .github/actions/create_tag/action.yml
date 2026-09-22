@@ -37,7 +37,7 @@ runs:
         TAG_VER: ${{ inputs.tag_ver }}
         KSU_VER: ${{ inputs.ksu_ver }}
       run: |
-        FINAL_TAG="$KERN_VER-$TAG_VER-$KSU_VER"
+        FINAL_TAG="$KERN_VER-android15-8-$TAG_VER-4k@$KSU_VER"
         echo "tag=$FINAL_TAG" >> $GITHUB_OUTPUT
         echo "Generated tag: $FINAL_TAG"
       shell: bash
