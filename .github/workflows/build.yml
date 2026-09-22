@@ -117,7 +117,11 @@ jobs:
               fi
           fi
 
+          START=$(date +%s)
+
           tools/bazel run --config=stamp //froggerpro:$KERNEL --noclean
+
+          END=$(date +%s)
 
           if [ "$SELECTED_KERNEL" = "KernelSU-Next" ]; then
               KSU_DIR="common/KernelSU-Next"
@@ -130,6 +134,8 @@ jobs:
           else
               echo "ksu_ver=$(git -C "$KSU_DIR" describe --tags --abbrev=0)-$(git -C "$KSU_DIR" rev-parse --short=12 HEAD)@$(git -C "KSU_DIR" rev_parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
           fi
+
+        echo "build_time=$((END - START)) >> $GITHUB_OUTPUT"
 
       - name: Upload Kernel Modules
         uses: actions/upload-artifact@v7
@@ -157,14 +163,19 @@ jobs:
 
       - name: Generate Changelog
         run: |
+          BUILD_TIME=${{ steps.build.outputs.build_time }}
+          MINUTES=$((BUILD_TIME / 60))
+          SECS=$((BUILD_TIME % 60))
+
           echo "" > ${{ github.workspace }}/CHANGELOG.txt
           echo "## 📱 Kernel build for froggerPro -- Nothing Phone (4a) Pro" >> ${{ github.workspace }}/CHANGELOG.txt
           echo "" >> ${{ github.workspace }}/CHANGELOG.txt
-          echo "**Kernel Version:** ${{ steps.build.outputs.kernel_ver }}-android15-8-${{ steps.build.outputs.tag_ver }}-4k" >> ${{ github.workspace }}/CHANGELOG.txt
-          echo "**KernelSU Type:** ${{ inputs.kernel }}" >> ${{ github.workspace }}/CHANGELOG.txt
-          echo "**KernelSU Version:** ${{ steps.build.outputs.ksu_ver }}" >> ${{ github.workspace }}/CHANGELOG.txt
-          echo "**SUSFS enabled:** ${{ inputs.susfs }}" >> ${{ github.workspace }}/CHANGELOG.txt
-          echo "**Runner:** ${{ inputs.runner }}" >> ${{ github.workspace }}/CHANGELOG.txt
+          echo "◾ **Kernel Version:** ${{ steps.build.outputs.kernel_ver }}-android15-8-${{ steps.build.outputs.tag_ver }}-4k" >> ${{ github.workspace }}/CHANGELOG.txt
+          echo "◽ **KernelSU Type:** ${{ inputs.kernel }}" >> ${{ github.workspace }}/CHANGELOG.txt
+          echo "◾ **KernelSU Version:** ${{ steps.build.outputs.ksu_ver }}" >> ${{ github.workspace }}/CHANGELOG.txt
+          echo "◽ **SUSFS enabled:** ${{ inputs.susfs }}" >> ${{ github.workspace }}/CHANGELOG.txt
+          echo "🏃‍➡️ **Runner:** ${{ inputs.runner }}" >> ${{ github.workspace }}/CHANGELOG.txt
+          echo "⌛ **Compile Time:** ${MINUTES}m${SECS}s" >> ${{ github.workspace }}/CHANGELOG.txt
 
       - name: Create Github Release
         uses: ./.github/actions/create_release
