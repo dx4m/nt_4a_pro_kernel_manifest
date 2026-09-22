@@ -161,3 +161,8 @@ jobs:
           files: "nt_kernel_build/out/msm-kernel-sun-perf/dist/boot.img"
           gh_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Remove everything
+        run: |
+          rm -rf nt_kernel_build
+
+
