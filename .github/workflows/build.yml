@@ -82,7 +82,7 @@ jobs:
           echo "Building kernel..."
 
           KERNEL_VER=$(make -C common --no-print-directory kernelversion | tr -d '\n')
-          TAG_VER="g$(git -C common rev-parse --short HEAD | tr -d '\n')"
+          TAG_VER="g$(git -C common rev-parse --short=12 HEAD | tr -d '\n')"
           echo "kernel_ver=$KERNEL_VER" >> $GITHUB_OUTPUT
           echo "tag_ver=$TAG_VER" >> $GITHUB_OUTPUT
           
@@ -125,7 +125,7 @@ jobs:
           if [ "$SELECTED_KERNEL" = "Stock Kernel" ]; then
               echo "ksu_ver=Stock" >> $GITHUB_OUTPUT
           else
-              echo "ksu_ver=$SELECTED_KERNEL-$(git -C "$KSU_DIR" rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+              echo "ksu_ver=$SELECTED_KERNEL-$(git -C "$KSU_DIR" rev-parse --short=12 HEAD)" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload Kernel Modules
@@ -156,7 +156,7 @@ jobs:
         run: |
           echo "# Kernel Build for froggerPro (Nothing Phone (4a) Pro)" > ${{ github.workspace }}/CHANGELOG.txt
           echo "" >> ${{ github.workspace }}/CHANGELOG.txt
-          echo "Kernel Version: ${{ steps.build.outputs.kernel_ver }}-${{ steps.build.outputs.tag_ver }}" >> ${{ github.workspace }}/CHANGELOG.txt
+          echo "Kernel Version: ${{ steps.build.outputs.kernel_ver }}-android15-8-${{ steps.build.outputs.tag_ver }}-4k" >> ${{ github.workspace }}/CHANGELOG.txt
           echo "Kernel Type: ${{ inputs.kernel }}" >> ${{ github.workspace }}/CHANGELOG.txt
           echo "SUSFS: ${{ inputs.susfs }}" >> ${{ github.workspace }}/CHANGELOG.txt
           echo "Runner: ${{ inputs.runner }}" >> ${{ github.workspace }}/CHANGELOG.txt
