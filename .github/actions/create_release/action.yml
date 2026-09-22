@@ -26,5 +26,6 @@ runs:
         name: ${{ inputs.release_name }}
         files: ${{ inputs.files }}
         tag_name: ${{ inputs.tag_name }}
+        body_path: ${{ inputs.body_path }}
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
